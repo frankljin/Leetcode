@@ -9,15 +9,15 @@ public:
     }
 };
 
-class Trie {
+class WordDictionary {   
 public:
     TrieNode *root;
     
-    Trie() {
+    WordDictionary() {
         root = new TrieNode();
     }
     
-    void insert(string word) {
+    void addWord(string word) {
         TrieNode *curr = root;
         for (int i = 0; i < word.length(); i++) {
             int idx = word[i] - 'a';
@@ -27,27 +27,23 @@ public:
         curr->isEnd = true;
     }
     
-    bool search(string word) {
-        TrieNode *curr = root;
+    bool trieSearch(TrieNode *tn, string word) {
         for (int i = 0; i < word.length(); i++) {
+            if (word[i] == '.') {
+                for (int j = 0; j < 26; j++) {
+                    if (tn->nextChar[j] && trieSearch(tn->nextChar[j], word.substr(i + 1))) return true;
+                }
+                return false;
+            }
             int idx = word[i] - 'a';
-            if (!curr->nextChar[idx]) return false;
-            curr = curr->nextChar[idx];
+            if (!tn->nextChar[idx]) return false;
+            tn = tn->nextChar[idx];
         }
-        return curr->isEnd;
+        return tn->isEnd;
     }
     
-    bool startsWith(string prefix) {
+    bool search(string word) {
         TrieNode *curr = root;
-        for (int i = 0; i < prefix.length(); i++) {
-            int idx = prefix[i] - 'a';
-            if (!curr->nextChar[idx]) return false;
-            curr = curr->nextChar[idx];
-        }
-        if (curr->isEnd) return true;
-        for (int i = 0; i < 26; i++) {
-            if (curr->nextChar[i]) return true;
-        }
-        return false;
+        return trieSearch(curr, word);
     }
 };
