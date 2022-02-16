@@ -1,9 +1,7 @@
 class Solution {
 public:
     int myAtoi(string s) {
-        bool num_seen = false;
-        bool sign_seen = false;
-        bool is_neg = false;
+        bool num_seen = false, sign_seen = false, is_neg = false;
         string num_str = "";
         for (int i = 0; i < s.length(); i++) {
             if (s[i] == ' ' && !num_seen && !sign_seen) {
@@ -23,8 +21,7 @@ public:
                 break;
             }
         }
-        int n = num_str.length() - 1;
-        int idx = 0;
+        int n = num_str.length() - 1, idx = 0;
         unsigned int res = 0;
         while (n >= 0) {
             if ((res > INT_MAX / 10) || (res == INT_MAX / 10 && num_str[idx] - '0' > INT_MAX % 10)) {
